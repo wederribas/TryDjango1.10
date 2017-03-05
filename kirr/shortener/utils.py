@@ -7,7 +7,6 @@ def code_generator(size=6, chars=string.ascii_lowercase + string.digits):
 
 def create_shortcode(instance, size=6):
 	new_code = code_generator(size=size)
-
 	KirrURL = instance.__class__
 	qs_exists = KirrURL.objects.filter(shortcode=new_code).exists()
 
