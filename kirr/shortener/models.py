@@ -9,12 +9,14 @@ class KirrURLManager(models.Manager):
 		qs = qs_main.filter(active=True)
 		return qs
 
-	def refresh_shortcodes(self):
+	def refresh_shortcodes(self, items=None):
 		qs = KirrURL.objects.filter(id__gte=1)
+		if items is not None and isinstance(items, int):
+			qs = qs.order_by('-id')[:items]
 		new_codes = 0
 		for q in qs:
 			q.shortcode = create_shortcode(q)
-			print(q.shortcode)
+			print("{0} => {1}".format(q.id, q.shortcode))
 			q.save()
 			new_codes += 1
 		return "New codes made: {i}".format(i=new_codes)
