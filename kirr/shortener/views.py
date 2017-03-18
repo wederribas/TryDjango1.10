@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 
@@ -21,8 +21,9 @@ def kirr_redirect_view(request, shortcode=None, *args, **kwargs):
 	# The best one
 	obj = get_object_or_404(KirrURL, shortcode=shortcode)
 
-	return HttpResponse("Hello. The URL is: {sc}".format(sc=obj.url))
+	return HttpResponseRedirect(obj.url)
 
 class KirrCBView(View):
 	def get(self, request, shortcode=None, *args, **kwargs):
-		return HttpResponse("Hello from the other side. Shortcode => {sc}".format(sc=shortcode))
+		obj = get_object_or_404(KirrURL, shortcode=shortcode)
+		return HttpResponseRedirect(obj.url)

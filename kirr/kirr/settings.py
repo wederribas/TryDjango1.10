@@ -122,5 +122,5 @@ STATIC_URL = '/static/'
 
 
 # Project specific settings
-SHORTCODE_MAX = 10
-SHORTCODE_MIN = 5
+SHORTCODE_MAX = 15
+SHORTCODE_MIN = 6
