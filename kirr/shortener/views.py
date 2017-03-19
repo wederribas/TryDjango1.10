@@ -2,28 +2,29 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 
+from .forms import SubmitUrlForm
 from .models import KirrURL
 
-def kirr_redirect_view(request, shortcode=None, *args, **kwargs):
-	# One possibility
-	# try:
-	# 	obj = KirrURL.objects.get(shortcode=shortcode)
-	# except:
-	# 	obj = KirrURL.objects.all().first()
 
-	# Another possibility
-	# obj_url = None
-	# qs = KirrURL.objects.filter(shortcode__iexact=shortcode.upper())
-	# if qs.exists() and qs.count() == 1:
-	# 	obj = qs.first()
-	# 	obj_url = obj.url
+class HomeView(View):
+	def get(self, request, *args, **kwargs):
+		form = SubmitUrlForm()
+		context = {
+			'title': 'Kirr.co',
+			'form': form,
+		}
+		return render(request, 'shortener/home.html', context)
 
-	# The best one
-	obj = get_object_or_404(KirrURL, shortcode=shortcode)
+	def post(self, request, *args, **kwargs):
+		form = SubmitUrlForm(request.POST)
+		context = {
+			'title': 'Kirr.co',
+			'form': form,
+		}
+		return render(request, 'shortener/home.html', context)
 
-	return HttpResponseRedirect(obj.url)
-
-class KirrCBView(View):
+class KirrShortener(View):
 	def get(self, request, shortcode=None, *args, **kwargs):
 		obj = get_object_or_404(KirrURL, shortcode=shortcode)
+		print(obj.url)
 		return HttpResponseRedirect(obj.url)
