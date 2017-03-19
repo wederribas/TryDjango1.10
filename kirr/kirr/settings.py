@@ -25,7 +25,7 @@ SECRET_KEY = 'od#xvyp)ku^6xes=9+-h@sa8p#7p2c2-m52)w2%lqo40l(=_18'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.tirr.com', 'tirr.com', 'blog.tirr.com']
 
 
 # Application definition
@@ -37,10 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third party apps
+    'django_hosts',
+
+    # Custom apps
     'shortener',
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,9 +54,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'kirr.urls'
+ROOT_HOSTCONF = 'kirr.hosts'
+DEFAULT_HOST = 'www'
+DEFAULT_REDIRECT_URL = "http://www.tirr.com:8000"
 
 TEMPLATES = [
     {
