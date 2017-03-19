@@ -5,12 +5,14 @@ from django.views import View
 from .forms import SubmitUrlForm
 from .models import KirrURL
 
+TITLE = 'Kirr.co'
+
 
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
 		form = SubmitUrlForm()
 		context = {
-			'title': 'Kirr.co',
+			'title': TITLE,
 			'form': form,
 		}
 		return render(request, 'shortener/home.html', context)
@@ -18,10 +20,26 @@ class HomeView(View):
 	def post(self, request, *args, **kwargs):
 		form = SubmitUrlForm(request.POST)
 		context = {
-			'title': 'Kirr.co',
+			'title': TITLE,
 			'form': form,
 		}
-		return render(request, 'shortener/home.html', context)
+		template = 'shortener/home.html'
+
+		if form.is_valid():
+			new_url = form.cleaned_data.get('url')
+			obj, created = KirrURL.objects.get_or_create(url=new_url)
+			context = {
+				'title': TITLE,
+				'object': obj,
+				'created': created,
+			}
+
+			if created:
+				template = 'shortener/success.html'
+			else:
+				template = 'shortener/already-exists.html'
+
+		return render(request, template, context)
 
 class KirrShortener(View):
 	def get(self, request, shortcode=None, *args, **kwargs):
