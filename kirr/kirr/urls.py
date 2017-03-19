@@ -7,5 +7,5 @@ from shortener.views import HomeView, KirrShortener
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', HomeView.as_view()),
-    url(r'^(?P<shortcode>[\w-]{6,15})/$', KirrShortener.as_view()),
+    url(r'^(?P<shortcode>[\w-]+)/$', KirrShortener.as_view(), name='scode'),
 ]
