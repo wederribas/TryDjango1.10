@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>{{ title }}</title>
-</head>
-<body>
-	<div style='align-text: center;width: 800px; margin: 0 auto;'>
-		<h1>Exists!</h1>
-		<p>{{ object.url }}</p>
-		{% if object.clickevent %}<p>Count: {{ object.clickevent.count }}</p>{% endif %}
-		<p><a href='{{ object.get_short_url }}'>{{ object.get_short_url }}</a></p>
-		<a href="/">+ New</a>
-	</div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}It's short!{% endblock title %}
+
+{% block content %}
+<div>
+	<h1>Exists!</h1>
+	<p>{{ object.url }}</p>
+	{% if object.clickevent %}<p>Count: {{ object.clickevent.count }}</p>{% endif %}
+	<p><a class="btn btn-primary btn-link" href='{{ object.get_short_url }}'>{{ object.get_short_url }}</a></p>
+	<a class="btn btn-default" href="/">+ New</a>
+</div>
+{% endblock content %}
