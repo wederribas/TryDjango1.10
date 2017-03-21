@@ -1,12 +1,14 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.views import View
+
+from analytics.models import ClickEvent
 
 from .forms import SubmitUrlForm
 from .models import KirrURL
 
-TITLE = 'Kirr.co'
 
+TITLE = 'Kirr.co'
 
 class HomeView(View):
 	def get(self, request, *args, **kwargs):
@@ -39,10 +41,14 @@ class HomeView(View):
 			else:
 				template = 'shortener/already-exists.html'
 
+		print(obj)
 		return render(request, template, context)
 
-class KirrShortener(View):
+class URLRedirectView(View):
 	def get(self, request, shortcode=None, *args, **kwargs):
-		obj = get_object_or_404(KirrURL, shortcode=shortcode)
-		print(obj.url)
+		qs = KirrURL.objects.filter(shortcode__iexact=shortcode)
+		if qs.count != 1 and not qs.exists():
+			raise Http404
+		obj = qs.first()
+		ClickEvent.objects.create_event(obj)
 		return HttpResponseRedirect(obj.url)
