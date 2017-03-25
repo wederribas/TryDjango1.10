@@ -41,7 +41,6 @@ class HomeView(View):
 			else:
 				template = 'shortener/already-exists.html'
 
-		print(obj)
 		return render(request, template, context)
 
 class URLRedirectView(View):
